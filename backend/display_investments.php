@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-$file = 'data/investments.json';
+$file = '../data/investments.json';
 
 //if data exist convert to JSON and send back to js
 if (file_exists($file)) {

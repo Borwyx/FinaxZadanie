@@ -36,7 +36,7 @@ document.getElementById('investment-form').addEventListener('submit', function(e
 
     if (validateInputs(investment)) {
         if (editInvestment) {
-            fetch('update_investment.php', {
+            fetch('backend/update_investment.php', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -56,7 +56,7 @@ document.getElementById('investment-form').addEventListener('submit', function(e
                     }
                 }); 
         } else {
-            fetch('save_investment.php', {
+            fetch('backend/save_investment.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -80,7 +80,7 @@ document.getElementById('investment-form').addEventListener('submit', function(e
 
 function displayInvestments() {
     document.getElementById('plotly-div').style.display = 'block'
-    fetch('display_investments.php')
+    fetch('backend/display_investments.php')
         .then(response => response.json())
         .then(investments => {
             const investmentList = document.getElementById('investment-list');
@@ -182,7 +182,7 @@ function createInvestments(investments, totalInvestValue) {
 }
 
 function deleteInvestment(index) {
-    fetch('delete_investment.php', {
+    fetch('backend/delete_investment.php', {
         method: 'DELETE', //DELETE
         headers: {
             'Content-Type': 'application/json'
@@ -202,7 +202,7 @@ function deleteInvestment(index) {
 
 function editInvestment(index) {
     document.getElementById('plotly-div').style.display = 'none'
-    fetch('display_investments.php')
+    fetch('backend/display_investments.php')
         .then(response => response.json())
         .then(investments => {
             toggleDisplay('investment-form', 'investment-list', false);
@@ -211,7 +211,7 @@ function editInvestment(index) {
 
             document.getElementById('name').value = investment.name;
             document.getElementById('value').value = investment.value;
-            document.getElementById('date').value = investment.percentage;
+            document.getElementById('date').value = investment.date;
 
             document.getElementById('submit-btn').textContent = 'Upraviť investíciu';
             document.getElementById('investment-form').dataset.editInvestment = index; //tu editne dataset
