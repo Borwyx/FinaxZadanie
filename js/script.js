@@ -24,11 +24,12 @@ document.getElementById('investment-form').addEventListener('submit', function(e
 
     const name = document.getElementById('name').value.trim(); //remove whtie spaces
     const value = document.getElementById('value').value.trim();
-    //const percentage = document.getElementById('percentage').value.trim();
+    const date = document.getElementById('date').value;
 
     const investment = {
         name: name,
         value: value,
+        date: date
     };
 
     const editInvestment = this.dataset.editInvestment;
@@ -97,8 +98,16 @@ function displayInvestments() {
                 height: 400,
                 width: 500
             };
+            
+            if(investments.length === 0 || investments == null) {
+                const headingElement = document.createElement('h1');
+                headingElement.textContent = `Neexistujú žiadne investície`;
+                investmentList.appendChild(headingElement);
 
-            if(investments !== null) {
+                document.getElementById('plotly').style.display = 'none';
+            }
+               
+            else{ 
                 investments.forEach(investment => {
                     totalInvestValue += Number(investment.value);
                     data[0].values.push(Number(investment.value));
@@ -107,59 +116,74 @@ function displayInvestments() {
 
                 Plotly.newPlot('plotly', data, layout);
 
-                investmentList.innerHTML = `
-                <h1>Celková hodnota port je ${totalInvestValue}€ </h1>`
+                const headingElement = document.createElement('h1');
+                headingElement.textContent = `Celková hodnota portfólia je ${totalInvestValue} €`;
+                investmentList.appendChild(headingElement);
 
-                    investments.forEach((investment, index) => {
-                        const investmentDiv = document.createElement('div');
-                        investmentDiv.classList.add('main-container');
+                let body = createInvestments(investments, totalInvestValue);
+                investmentList.appendChild(body);
 
-                        const infoContainer = document.createElement('div');
-                        infoContainer.classList.add('info-container');
-
-                        const nameElement = document.createElement('strong');
-                        nameElement.textContent = investment.name;
-
-                        const valueElement = document.createElement('p');
-                        valueElement.textContent = `Hodnota: ${investment.value} EUR`;
-
-                        const percentageElement = document.createElement('p');
-                        const percentage = (investment.value / totalInvestValue * 100).toFixed(2);
-                        percentageElement.textContent = `Percentuálny podiel: ${percentage}%`;
-
-                        infoContainer.appendChild(nameElement);
-                        infoContainer.appendChild(valueElement);
-                        infoContainer.appendChild(percentageElement);
-
-                        const actionContainer = document.createElement('div');
-                        actionContainer.classList.add('action-container');
-
-                        const editButton = document.createElement('button');
-                        editButton.textContent = 'Uprav investíciu';
-                        editButton.onclick = () => editInvestment(index);
-
-                        const deleteButton = document.createElement('button');
-                        deleteButton.textContent = 'Vymaž investíciu';
-                        deleteButton.onclick = () => deleteInvestment(index);
-
-                        actionContainer.appendChild(editButton);
-                        actionContainer.appendChild(deleteButton);
-
-                        investmentDiv.appendChild(infoContainer);
-                        investmentDiv.appendChild(actionContainer);
-
-                        document.getElementById('investment-list').appendChild(investmentDiv);
-                });
-            }else{
-                investmentList.innerHTML = `
-                <h1>Neexistujú žiadne investície</h1>`
             }
             });
 }
 
+function createInvestments(investments, totalInvestValue) {
+
+    const investmentContainer = document.createElement('div');
+
+    investments.forEach((investment, index) => {
+        const investmentDiv = document.createElement('div');
+        investmentDiv.classList.add('main-container');
+
+        const infoContainer = document.createElement('div');
+        infoContainer.classList.add('info-container');
+
+        const nameElement = document.createElement('strong');
+        nameElement.textContent = investment.name;
+
+        const valueElement = document.createElement('p');
+        valueElement.textContent = `Hodnota: ${investment.value} EUR`;
+
+        const percentageElement = document.createElement('p');
+        const percentage = (investment.value / totalInvestValue * 100).toFixed(2);
+        percentageElement.textContent = `Percentuálny podiel: ${percentage}%`;
+
+        const dateElement = document.createElement('p');
+        dateElement.textContent = `Dátum nákupu investície: ${investment.date}`
+
+        infoContainer.appendChild(nameElement);
+        infoContainer.appendChild(valueElement);
+        infoContainer.appendChild(percentageElement);
+        infoContainer.appendChild(dateElement);
+
+        const actionContainer = document.createElement('div');
+        actionContainer.classList.add('action-container');
+
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Uprav investíciu';
+        editButton.onclick = () => editInvestment(index);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Vymaž investíciu';
+        deleteButton.onclick = () => deleteInvestment(index);
+
+        actionContainer.appendChild(editButton);
+        actionContainer.appendChild(deleteButton);
+
+        investmentDiv.appendChild(infoContainer);
+        investmentDiv.appendChild(actionContainer);
+
+        investmentContainer.appendChild(investmentDiv);
+
+    });
+
+    return investmentContainer;
+
+}
+
 function deleteInvestment(index) {
     fetch('delete_investment.php', {
-        method: 'POST',
+        method: 'DELETE', //DELETE
         headers: {
             'Content-Type': 'application/json'
         },
@@ -187,7 +211,7 @@ function editInvestment(index) {
 
             document.getElementById('name').value = investment.name;
             document.getElementById('value').value = investment.value;
-            //document.getElementById('percentage').value = investment.percentage;
+            document.getElementById('date').value = investment.percentage;
 
             document.getElementById('submit-btn').textContent = 'Upraviť investíciu';
             document.getElementById('investment-form').dataset.editInvestment = index; //tu editne dataset
@@ -195,6 +219,8 @@ function editInvestment(index) {
 }
 
 function validateInputs(investment) {
+
+    const date = new Date(investment.date);
 
     function displayError(element, span) {
         element.style.border = "2px solid red";
@@ -207,8 +233,8 @@ function validateInputs(investment) {
         span.style.visibility = "hidden";
     }
 
-    if (investment.name === "") {
-        //document.getElementById('name-span').style.visibility = "visible"
+    //string to number validation
+    if (investment.name === "" || !isNaN(investment.name)) {
         return displayError(document.getElementById('name'), document.getElementById('name-span'));
     } else {
         hideError(document.getElementById('name'), document.getElementById('name-span'));
@@ -218,6 +244,14 @@ function validateInputs(investment) {
         return displayError(document.getElementById('value'), document.getElementById('value-span'));
     } else {
         hideError(document.getElementById('value'), document.getElementById('value-span'));
+    }
+
+    if(!date){
+        return displayError(document.getElementById('date'), document.getElementById('date-span'));
+    } else if (isNaN(date.getTime()) || date > new Date() || date.getFullYear() > new Date().getFullYear()) {
+        return displayError(document.getElementById('date'), document.getElementById('date-span'));
+    } else {
+        hideError(document.getElementById('date'), document.getElementById('date-span'));
     }
 
     return true;

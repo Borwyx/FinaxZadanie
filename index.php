@@ -22,7 +22,6 @@
             <button id="showInvestment" class="btns">Zobraziť investície</button>
         </div>
 
-
         <div id="investment-list" class="investment-list"></div>
 
         <form id="investment-form">
@@ -36,15 +35,12 @@
                 <input type="number" id="value" placeholder="Hodnota investície">
                 <span id="value-span" style="visibility: hidden">Zadajte nezáporne a nenulové číslo</span>
             </div>
-            <!--<div class="form-group">
-                 <label for="percentage">Percentuálny podiel (%)</label>
-               <span id="percentage-span" style="visibility: hidden">Zadajte nezáporne číslo, nenulové alebo menšie ako 100</span> 
-            
-            <input type="number" id="percentage" placeholder="Percentuálny podiel">
-          
-
-    </div> -->
-            <button type="submit" id="submit-btn">Pridať investíciu</button>
+            <div class="form-group">
+                <label for="date">Dátum nákupu</label>
+                <input type="date" id="date" placeholder="1.1.2024">
+                <span id="date-span" style="visibility: hidden">Zadajte validný dátum</span>
+            </div>
+            <button type="submit" id="submit-btn">Uložiť investíciu</button>
         </form>
 
         <div class="percentage-usage">
@@ -56,7 +52,7 @@
 
     <div id="snackbar">Operácia sa podarila</div>
 
-    <footer class="made-by">Made by Boris Velička</footer>
+    <!--<footer class="made-by">Made by Boris Velička</footer>-->
 
     <script src="js/script.js"></script>
 </body>
