@@ -1,0 +1,145 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+#name-span,
+#value-span,
+#percentage-span{
+    font-family: 'Roboto', sans-serif;
+    margin-left: 15px;
+    color: red;
+    font-size: 14px;
+}
+
+.container,
+.made-by {
+    max-width: 950px;
+    margin: 80px auto;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.made-by{
+    position: fixed;
+    bottom: 0;
+    margin: 5px 5px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+form {
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    font-size: 1.1em;
+    color: #34495e;
+    margin-bottom: 5px;
+    display: block;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    border-color: #2980b9;
+    outline: none;
+}
+
+.investment-list {
+    margin-top: 20px;
+}
+
+.investment strong {
+    font-size: 1.2em;
+    color: #2c3e50;
+}
+
+.investments-btns{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+#investment-form{
+    display:block;
+}
+
+
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.plotly{
+    margin-top: 15px;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+}
+
+.info-container {
+    flex: 3;
+}
+
+.action-container {
+    display: flex;
+    gap: 10px;
+}
+
+.action-container button {
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+button {
+    margin: 5px 5px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1em;
+}
+
+#submit-btn {
+    margin: 0;
+}
+
+button:hover {
+    transform: scale(1.03);
+    background-color: #01254a;
+}
