@@ -1,3 +1,5 @@
+
+//function to cover parts of web by clicking on buttons
 function toggleDisplay(showDiv, hideDiv, temp) {
     document.getElementById(showDiv).style.display = 'block';
     document.getElementById(hideDiv).style.display = 'none';
@@ -18,7 +20,7 @@ document.getElementById('showInvestment').addEventListener('click', function () 
 });
 
 
-
+//event listener added to button to submit form
 document.getElementById('investment-form').addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -36,6 +38,7 @@ document.getElementById('investment-form').addEventListener('submit', function(e
 
     if (validateInputs(investment)) {
         if (editInvestment) {
+            //API call (PUT) to edit the selected investment
             fetch('update_investment.php', {
                 method: 'PUT',
                 headers: {
@@ -56,6 +59,7 @@ document.getElementById('investment-form').addEventListener('submit', function(e
                     }
                 }); 
         } else {
+           //API call(POST) to add new investment
             fetch('save_investment.php', {
                 method: 'POST',
                 headers: {
@@ -78,6 +82,7 @@ document.getElementById('investment-form').addEventListener('submit', function(e
 
 });
 
+//function to fetch and display all investments from the server
 function displayInvestments() {
     document.getElementById('plotly-div').style.display = 'block'
     fetch('display_investments.php')
@@ -88,6 +93,7 @@ function displayInvestments() {
             toggleDisplay('investment-list', 'investment-form');
             let totalInvestValue = 0;
 
+            //data needed to create pie chart
             var data = [{
                 values: [],
                 labels: [],
@@ -99,15 +105,15 @@ function displayInvestments() {
                 width: 500
             };
             
+            //check if exist some investment
             if(investments.length === 0 || investments == null) {
                 const headingElement = document.createElement('h1');
                 headingElement.textContent = `Neexistujú žiadne investície`;
                 investmentList.appendChild(headingElement);
 
                 document.getElementById('plotly').style.display = 'none';
-            }
-               
-            else{ 
+            }else{ 
+                //calculates the total investment value
                 investments.forEach(investment => {
                     totalInvestValue += Number(investment.value);
                     data[0].values.push(Number(investment.value));
@@ -127,6 +133,7 @@ function displayInvestments() {
             });
 }
 
+//function to create DOM elements which return div
 function createInvestments(investments, totalInvestValue) {
 
     const investmentContainer = document.createElement('div');
@@ -159,6 +166,7 @@ function createInvestments(investments, totalInvestValue) {
         const actionContainer = document.createElement('div');
         actionContainer.classList.add('action-container');
 
+        //add event listeners to buttons
         const editButton = document.createElement('button');
         editButton.textContent = 'Uprav investíciu';
         editButton.onclick = () => editInvestment(index);
@@ -182,8 +190,9 @@ function createInvestments(investments, totalInvestValue) {
 }
 
 function deleteInvestment(index) {
+    //API call(DELETE) to delete selected investment
     fetch('delete_investment.php', {
-        method: 'DELETE', //DELETE
+        method: 'DELETE', 
         headers: {
             'Content-Type': 'application/json'
         },
@@ -200,6 +209,7 @@ function deleteInvestment(index) {
         });
 }
 
+//funtion to pre-fill investment data to edit
 function editInvestment(index) {
     document.getElementById('plotly-div').style.display = 'none'
     fetch('display_investments.php')
@@ -211,13 +221,14 @@ function editInvestment(index) {
 
             document.getElementById('name').value = investment.name;
             document.getElementById('value').value = investment.value;
-            document.getElementById('date').value = investment.percentage;
+            document.getElementById('date').value = investment.date;
 
             document.getElementById('submit-btn').textContent = 'Upraviť investíciu';
             document.getElementById('investment-form').dataset.editInvestment = index; //tu editne dataset
         });
 }
 
+//function to validate inputs from user
 function validateInputs(investment) {
 
     const date = new Date(investment.date);
@@ -233,19 +244,21 @@ function validateInputs(investment) {
         span.style.visibility = "hidden";
     }
 
-    //string to number validation
+    //checking name of investment
     if (investment.name === "" || !isNaN(investment.name)) {
         return displayError(document.getElementById('name'), document.getElementById('name-span'));
     } else {
         hideError(document.getElementById('name'), document.getElementById('name-span'));
     }
 
+    //checking value of investment
     if (investment.value === "" || investment.value <= 0) {
         return displayError(document.getElementById('value'), document.getElementById('value-span'));
     } else {
         hideError(document.getElementById('value'), document.getElementById('value-span'));
     }
 
+    //checking date of investment
     if(!date){
         return displayError(document.getElementById('date'), document.getElementById('date-span'));
     } else if (isNaN(date.getTime()) || date > new Date() || date.getFullYear() > new Date().getFullYear()) {
@@ -257,7 +270,7 @@ function validateInputs(investment) {
     return true;
 }
 
-
+//function that show "toast" notification by successful operation
 function showToast() {
     var x = document.getElementById("snackbar");
     x.className = "show";
