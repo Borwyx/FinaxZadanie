@@ -12,13 +12,15 @@ body {
 
 #name-span,
 #value-span,
-#date-span,
-#percentage-span{
+#percentage-span,
+#date-span{
     font-family: 'Roboto', sans-serif;
     margin-left: 15px;
     color: red;
     font-size: 14px;
+    font-weight: bold;
 }
+
 
 .container,
 .made-by {
