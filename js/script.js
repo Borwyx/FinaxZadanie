@@ -38,12 +38,8 @@ document.getElementById('investment-form').addEventListener('submit', function(e
 
     if (validateInputs(investment)) {
         if (editInvestment) {
-<<<<<<< HEAD
             //API call (PUT) to edit the selected investment
             fetch('update_investment.php', {
-=======
-            fetch('backend/update_investment.php', {
->>>>>>> 06c13e66cc88cb3969d07182357382245e0382a2
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -63,12 +59,8 @@ document.getElementById('investment-form').addEventListener('submit', function(e
                     }
                 }); 
         } else {
-<<<<<<< HEAD
            //API call(POST) to add new investment
             fetch('save_investment.php', {
-=======
-            fetch('backend/save_investment.php', {
->>>>>>> 06c13e66cc88cb3969d07182357382245e0382a2
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -93,7 +85,7 @@ document.getElementById('investment-form').addEventListener('submit', function(e
 //function to fetch and display all investments from the server
 function displayInvestments() {
     document.getElementById('plotly-div').style.display = 'block'
-    fetch('backend/display_investments.php')
+    fetch('display_investments.php')
         .then(response => response.json())
         .then(investments => {
             const investmentList = document.getElementById('investment-list');
@@ -198,14 +190,9 @@ function createInvestments(investments, totalInvestValue) {
 }
 
 function deleteInvestment(index) {
-<<<<<<< HEAD
     //API call(DELETE) to delete selected investment
     fetch('delete_investment.php', {
         method: 'DELETE', 
-=======
-    fetch('backend/delete_investment.php', {
-        method: 'DELETE', //DELETE
->>>>>>> 06c13e66cc88cb3969d07182357382245e0382a2
         headers: {
             'Content-Type': 'application/json'
         },
@@ -225,7 +212,7 @@ function deleteInvestment(index) {
 //funtion to pre-fill investment data to edit
 function editInvestment(index) {
     document.getElementById('plotly-div').style.display = 'none'
-    fetch('backend/display_investments.php')
+    fetch('display_investments.php')
         .then(response => response.json())
         .then(investments => {
             toggleDisplay('investment-form', 'investment-list', false);

@@ -3,7 +3,7 @@ $input = file_get_contents("php://input");
 $investment = json_decode($input, true);
 
 if ($investment) {
-    $file = '../data/investments.json';
+    $file = 'data/investments.json';
 
     if (file_exists($file)) {
         $data = json_decode(file_get_contents($file), true);
